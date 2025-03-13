@@ -1,0 +1,4 @@
+# Ignore keyframes/ old/ and data/ directories
+keyframes/
+old/
+data/

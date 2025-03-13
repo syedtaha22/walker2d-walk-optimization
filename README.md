@@ -6,11 +6,11 @@ This project employs an evolutionary algorithm to optimize keyframe-based motion
 ## **Evolutionary Algorithm Overview**  
 Evolutionary algorithms are a class of optimization techniques inspired by the process of natural selection. Given an initial population of potential solutions, the algorithm iteratively applies selection, crossover, and mutation to improve solutions over successive generations.  
 
-Let the population at generation \( t \) be denoted as:  
-\[
-P(t) = \{X_1^t, X_2^t, ..., X_N^t\}
-\]
-where each \( X_i^t \) represents an individual (keyframe sequence). The algorithm seeks to maximize a fitness function \( f(X) \), which evaluates how well a given sequence enables the Walker2D to move effectively.  
+Let the population at generation $t$ be denoted as:  
+
+$$P(t) = {X_1^t, X_2^t, ..., X_N^t}$$
+
+where each $X_i^t$ represents an individual (keyframe sequence). The algorithm seeks to maximize a fitness function $f(X)$, which evaluates how well a given sequence enables the Walker2D to move effectively.  
 
 The evolutionary process consists of:  
 1. **Selection**: Choosing parent individuals based on fitness.  
@@ -25,15 +25,16 @@ This cycle repeats until a stopping condition (e.g., target fitness or generatio
 The algorithm employs **binary tournament selection**, a stochastic method that favors higher-fitness individuals while preserving diversity.  
 
 ### **Mathematical Formulation**  
-Two individuals \( X_a \) and \( X_b \) are randomly selected from the population. Their fitness values \( f(X_a) \) and \( f(X_b) \) are compared, and the individual with higher fitness is chosen:  
+Two individuals $X_a$ and $X_b$ are randomly selected from the population. Their fitness values $f(X_a)$ and $f(X_b)$ are compared, and the individual with higher fitness is chosen:  
 
-\[
+$$
 X_{\text{selected}} =
 \begin{cases} 
 X_a, & \text{if } f(X_a) > f(X_b) \\
 X_b, & \text{otherwise}
 \end{cases}
-\]
+\
+$$
 
 This selection process is repeated to generate the mating pool. The stochastic nature of tournament selection helps maintain a balance between exploration and exploitation.  
 
@@ -46,21 +47,17 @@ Crossover combines genetic information from two parents to produce offspring. Tw
 A segment of keyframes from one parent is inserted into the other, preserving temporal structure while allowing genetic mixing.  
 
 #### **Mathematical Formulation**  
-Let \( X_A \) and \( X_B \) be two parent sequences, each consisting of \( k \) keyframes:  
+Let $X_A$ and $X_B$ be two parent sequences, each consisting of $k$ keyframes:  
 
-\[
-X_A = [K_1^A, K_2^A, ..., K_k^A], \quad X_B = [K_1^B, K_2^B, ..., K_k^B]
-\]
+$$X_A = [K_1^A, K_2^A, ..., K_k^A], \quad X_B = [K_1^B, K_2^B, ..., K_k^B]$$
 
-Two crossover points \( p_1, p_2 \) are selected:  
-\[
-1 \leq p_1 < p_2 \leq k
-\]
+Two crossover points $p_1, p_2$ are selected:  
+
+$$1 \leq p_1 < p_2 \leq k$$
 
 The offspring is formed as:  
-\[
-X_{\text{child}} = [K_1^A, ..., K_{p_1}^A, K_{p_1+1}^B, ..., K_{p_2}^B, K_{p_2+1}^A, ..., K_k^A]
-\]
+
+$$X_{\text{child}} = [K_1^A, ..., K_{p_1}^A, K_{p_1+1}^B, ..., K_{p_2}^B, K_{p_2+1}^A, ..., K_k^A]$$
 
 This allows sections of a well-performing parent to propagate while introducing variation.  
 
@@ -68,13 +65,11 @@ This allows sections of a well-performing parent to propagate while introducing 
 The **BLX-α** method generates offspring by extrapolating between parental values. This is particularly useful for real-valued parameters, ensuring smooth transitions between keyframe actions.  
 
 #### **Mathematical Formulation**  
-For each action dimension \( j \) in a keyframe:  
+For each action dimension $j$ in a keyframe:  
 
-\[
-X_{\text{child},j} = (1 + \alpha)X_{A,j} - \alpha X_{B,j}
-\]
+$$X_{\text{child},j} = (1 + \alpha) X_{A,j} - \alpha X_{B,j}$$
 
-where \( \alpha \) is a hyperparameter (typically \( \alpha = 0.3 \)) controlling the blending range. Duration values are inherited randomly from either parent.  
+where $\alpha$ is a hyperparameter (typically $\alpha = 0.3$) controlling the blending range. Duration values are inherited randomly from either parent.  
 
 BLX-α encourages exploration by allowing offspring to take values outside the direct parental range while ensuring smooth transitions between actions.  
 
@@ -86,17 +81,12 @@ Each crossover method is applied with a **50% probability**, ensuring genetic di
 Mutation prevents premature convergence by applying random perturbations to offspring.  
 
 ### **Mathematical Formulation**  
-Mutation is applied with probability \( P_m \). If mutation occurs:  
-1. **Action values** receive Gaussian noise:  
-   \[
-   X_{\text{mut},j} = X_{\text{orig},j} + \mathcal{N}(0, \sigma^2)
-   \]
-   where \( \sigma \) (mutation magnitude) controls the deviation.  
+Mutation is applied with probability $P_m$. If mutation occurs:  
+1. **Action values** receive Gaussian noise: $$X_{\text{mut},j} = X_{\text{orig},j} + \mathcal{N}(0, \sigma^2)$$
+
+   where $\sigma$ (mutation magnitude) controls the deviation.  
    
-2. **Duration values** receive uniform noise:  
-   \[
-   d_{\text{mut}} = d_{\text{orig}} + U(0, 10)
-   \]
+3. **Duration values** receive uniform noise: $$d_{\text{mut}} = d_{\text{orig}} + U(0, 10)$$
 
 All values are clipped within valid ranges to ensure physically feasible motions.  
 

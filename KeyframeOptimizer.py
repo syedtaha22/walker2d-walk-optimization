@@ -61,7 +61,7 @@ class KeyframeOptimizer:
         self.generation = 0
         self.render_mode_on = False
     
-    def optimize(self, filename="data/best_individual.csv"):
+    def optimize(self, filename="data/best_individual.csv", blx_alpha=0.5):
         """
         Runs the genetic algorithm until a keyframe sequence reaches the target fitness.
 
@@ -71,6 +71,7 @@ class KeyframeOptimizer:
 
         Args:
             filename (str): The file where the best individual keyframe sequence is saved. Defaults to "best_individual.csv".
+            blx_alpha (float): The alpha value for BLX-alpha crossover. Defaults to 0.5.
         """
         while self.best_fitness < self.target_fitness:
             fitnesses = np.array([self.agent.evaluate(ind) for ind in self.population])

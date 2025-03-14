@@ -85,19 +85,21 @@ class KeyframeOptimizer:
                 self.append_to_csv(best_individual, filename)
             
             # Select top-performing individuals as parents
-            top_parents = [self.population[i] for i in np.argsort(fitnesses)[-5:]]
-            new_population = list(top_parents)
+            # top_parents = [self.population[i] for i in np.argsort(fitnesses)[-5:]]
+            # new_population = list(top_parents)
+            new_population = []
             
             # Generate new individuals through crossover and mutation
             while len(new_population) < self.ga.population_size:
                 p1, p2 = self.ga.tournament_selection(self.population, fitnesses), \
                          self.ga.tournament_selection(self.population, fitnesses)
                 child = (self.ga.keyframe_swap_crossover(p1, p2) if np.random.rand() < 0.5 
-                         else self.ga.blxalpha_crossover(p1, p2, alpha=0.5))
+                         else self.ga.blxalpha_crossover(p1, p2, alpha=blx_alpha))
                 new_population.append(self.ga.mutate(child))
             
             self.population = new_population
-            self.log_to_csv("data/fitness_log.csv", self.generation, self.best_fitness)
+            self.log_to_csv("fitness_log.csv", self.generation, self.best_fitness)
+            self.log_to_csv("average_fitness_log.csv", self.generation, np.mean(fitnesses))
             self.generation += 1
         
         # Enable rendering for the best individual

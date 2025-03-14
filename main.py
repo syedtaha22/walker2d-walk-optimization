@@ -41,11 +41,18 @@ from KeyframeOptimizer import KeyframeOptimizer
 from GeneticAlgorithm import GeneticAlgorithm
 
 # Configuration Constants
-INITIAL_KEYFRAME_FILE = "data/802.csv"
-INTERMEDIATE_KEYFRAME_FILE = "keyframes/intermediatry.csv"
-NUM_KEYFRAMES = 7
-OPTIONAL_KEYFRAME_PERCENTAGE = 0.1
-TARGET_FITNESS = 1600
+INITIAL_KEYFRAME_FILE = "keyframes/init.csv"
+INTERMEDIATE_KEYFRAME_FILE = "keyframes/1500.csv" 
+NUM_KEYFRAMES = 2
+OPTIONAL_KEYFRAME_PERCENTAGE = 0.5
+TARGET_FITNESS = 2500
+
+BLX_ALPHA = 0.5
+MUTATION_RATE = 0.1
+MUTATION_MAGNITUDE = 0.2
+
+CTRL_COST_WEIGHT = 1e-3
+FORWARD_REWARD_WEIGHT = 1
 
 
 def load_keyframes(filename: str, num_keyframes: int = 10) -> np.ndarray:
@@ -72,8 +79,8 @@ if __name__ == "__main__":
     optional_keyframes = load_keyframes(INTERMEDIATE_KEYFRAME_FILE, NUM_KEYFRAMES)
 
     # Initialize components
-    agent = WalkerAgent()
-    ga = GeneticAlgorithm()
+    agent = WalkerAgent(ctrl_cost_weight=CTRL_COST_WEIGHT, forward_reward_weight=FORWARD_REWARD_WEIGHT)
+    ga = GeneticAlgorithm(mutation_rate=MUTATION_RATE, mutation_magnitude=MUTATION_MAGNITUDE)
     optimizer = KeyframeOptimizer(
         initial_keyframes,
         agent,
@@ -84,7 +91,7 @@ if __name__ == "__main__":
     )
 
     # Start optimization
-    optimizer.optimize()
+    optimizer.optimize(blx_alpha=BLX_ALPHA)
 
     # Run the best individual in the environment
     observation, _ = agent.env.reset()

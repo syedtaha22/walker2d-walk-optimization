@@ -21,7 +21,7 @@ class WalkerAgent:
         """
         self.env = gym.make(env_name, forward_reward_weight=forward_reward_weight, ctrl_cost_weight=ctrl_cost_weight)
     
-    def evaluate(self, individual, runs=3):
+    def evaluate(self, individual, runs=10):
         """
         Evaluates an individual's performance over multiple runs and returns the average reward.
 

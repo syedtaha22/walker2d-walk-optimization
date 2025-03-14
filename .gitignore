@@ -2,3 +2,10 @@
 keyframes/
 old/
 data/
+
+
+# Ignore run_best.py
+run_best.py
+
+# Ignore SUBMISSION.txt
+SUBMISSION.txt
